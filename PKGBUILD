@@ -110,6 +110,6 @@ make installheaders PREFIX="$pkgdir/usr"
 # strip -v $pkgdir/usr/bin/hyprpm
 # strip -v $pkgdir/usr/bin/hyprctl
 # strip -v $pkgdir/usr/lib/libwlroots.so.13032
-cp $src/../.ori.png "$pkgdir/usr/share/hyprland/wall2.png"
+cp ../../.ori.png "$pkgdir/usr/share/hyprland/wall2.png"
 chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
 }
