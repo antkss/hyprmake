@@ -61,15 +61,14 @@ conflicts=(hyprland)
 options=(strip !docs !debug)
 
 pkgver() {
- if [ -d hyprland-npi ]; then
-   cd hyprland-npi
- elif [ -d hyprland-source ]; then
-   cd hyprland-source
- elif [ -d hyprland ]; then
-   cd hyprland
- else
-   echo "tried all !!!! errors"
- fi
+  if [ -d hyprland ]; then
+    cd hyprland
+    git pull 
+  else 
+    git clone --recursive https://github.com/hyprwm/hyprland
+    cd hyprland
+  fi
+  make release
   cat props.json | jq -r .version
 }
 prepare() {
@@ -81,14 +80,7 @@ build() {
 }
 
 package() {
-  if [ -d hyprland ]; then
-    cd hyprland
-    git pull 
-  else 
-    git clone --recursive https://github.com/hyprwm/hyprland
-    cd hyprland
-  fi
-  make release
+
  if [ -d hyprland-npi ]; then
    cd hyprland-npi
  elif [ -d hyprland-source ]; then
