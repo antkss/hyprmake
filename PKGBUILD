@@ -82,8 +82,8 @@ build() {
 	mkdir build
 	cd build
     fi
-    cmake .. 
-    make -j$(nproc)
+    cmake .. -j $(nproc) 
+    make
 }
 
 package() {
