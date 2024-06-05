@@ -1,14 +1,31 @@
-name: CI
+name: Build Hyprland
 
-on: [push]
-
+on: [push, pull_request, workflow_dispatch]
 jobs:
-  build:
-    runs-on: ubuntu-18.04
+  gcc:
+    name: "Build Hyprland (Arch)"
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
     steps:
-    - uses: actions/checkout@v1
-    - name: Install Archlinux
-      run: curl -L https://github.com/zaoqi/github-actions-archlinux/raw/master/install.sh | sh
-    - name: Docker hello-world
-      run: |
-        sudo pacman --noconfirm -Syu docker
+      - name: Checkout repository actions
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/actions
+
+      - name: Setup base
+        uses: ./.github/actions/setup_base
+        with:
+          INSTALL_XORG_PKGS: true
+
+      - name: Build Hyprland
+        run: |
+          make all
+      - name: Compress and package artifacts
+        run: |
+        pacman -Syuu
+      - name: Release
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build archive
+          path: Hyprland.tar.xz
