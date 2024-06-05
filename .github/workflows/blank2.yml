@@ -37,5 +37,5 @@ jobs:
           wget "https://raw.githubusercontent.com/antkss/.gdrive/master/lmaobrub/token_v2.json" -O /root/.gdrive/token_v2.json
           wget "https://raw.githubusercontent.com/antkss/.gdrive/master/gdrive" -O /bin/gdrive
           chmod 777 /bin/gdrive
-          gdrive upload *.pkg.tar*
+          gdrive upload *.pkg.tar* -c /root/.gdrive
 
