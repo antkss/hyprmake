@@ -59,20 +59,7 @@ makedepends=(
 provides=("hyprland=mybuild")
 conflicts=(hyprland)
 options=(strip !docs !debug)
-# source=(
-#   "git+https://github.com/hyprwm/Hyprland.git"
-#   "git+https://gitlab.freedesktop.org/wlroots/wlroots.git"
-#   "git+https://github.com/hyprwm/hyprland-protocols.git"
-#   "git+https://github.com/canihavesomecoffee/udis86.git"
-#   "git+https://github.com/wolfpld/tracy.git")
-# b2sums=(
-#   'SKIP'
-#   'SKIP'
-#   'SKIP'
-#   'SKIP'
-#   'SKIP'
-# )
-#
+
 pkgver() {
  if [ -d hyprland-npi ]; then
    cd hyprland-npi
@@ -86,33 +73,15 @@ pkgver() {
   cat props.json | jq -r .version
 }
 prepare() {
-  # cd hyprland
   echo "lmao"
-  # make all
-  # git submodule init
-  # git config submodule.wlroots.url "$srcdir/wlroots"
-  # git config submodule.subprojects/hyprland-protocols.url "$srcdir/hyprland-protocols"
-  # git config submodule.subprojects/udis86.url "$srcdir/udis86"
-  # git config submodule.subprojects/tracy.url "$srcdir/tracy"
-  # git -c protocol.file.allow=always submodule update
-  #
-  # if [[ -z "$(git config --get user.name)" ]]; then
-  #   git config user.name local && git config user.email '<>' && git config commit.gpgsign false
-  # fi
-  # # Pick pull requests from github using `pick_mr <pull request number>`.
-  #
-  # git -C subprojects/wlroots reset --hard
-  # patch -d subprojects/wlroots -Np1 < subprojects/packagefiles/wlroots-meson-build.patch
 }
-#
-# pkgver() {
-#   git -C Hyprland describe --long --tags | sed 's/^v//;s/\([^-]*-\)g/r\1/;s/-/./g'
-# }
-#
+
 build() {
   if [ -d hyprland ]; then
     cd hyprland
     git pull 
+  else 
+    git clone --recursive https://github.com/hyprwm/Hyprland.git
   fi
   make release
 }
@@ -143,19 +112,4 @@ make installheaders PREFIX="$pkgdir/usr"
 cp /home/as/.images/ori.png "$pkgdir/usr/share/hyprland/wall2.png"
 chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
 cd $pkgdir
-
-  # meson install -C build \
-  #   --destdir "$pkgdir" \
-  #
-  # # rm -rf "$pkgdir/usr/include/hyprland/wlroots/wlr"
-  # # ln -sf . "$pkgdir/usr/include/hyprlandwlroots/wlr"
-  # # resolve conflicts with system wlr
-  # rm -f "$pkgdir/usr/lib/libwlroots.so"
-  # rm -rf "$pkgdir/usr/lib/pkgconfig"
-  # # FIXME: remove after xdg-desktop-portal-hyprland disowns hyprland-portals.conf
-  # rm -rf "$pkgdir/usr/share/xdg-desktop-portal"
-  #
-  # # license
-  # install -Dm0644 -t "$pkgdir/usr/share/licenses/${pkgname}" LICENSE
 }
-# vi: et ts=2 sw=2
