@@ -2,8 +2,8 @@
 # Maintainer: éclairevoyant
 # Contributor: ThatOneCalculator <kainoa at t1c dot dev>
 
-pkgname=hyprland-npi
-pkgver=0.39.1
+pkgname=hyprland-test
+pkgver=0.40.0
 pkgrel=1
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(x86_64)
@@ -74,11 +74,15 @@ options=(strip !docs !debug)
 # )
 #
 pkgver() {
-if [ -d hyprland-npi ]; then
-  cd hyprland-npi
-else
-  cd hyprland-source
-fi
+ if [ -d hyprland-npi ]; then
+   cd hyprland-npi
+ elif [ -d hyprland-source ]; then
+   cd hyprland-source
+ elif [ -d hyprland ]; then
+   cd hyprland
+ else
+   echo "tried all !!!! errors"
+ fi
   cat props.json | jq -r .version
 }
 prepare() {
@@ -125,16 +129,27 @@ build() {
 }
 
 package() {
-if [ -d hyprland-npi ]; then
-  cd hyprland-npi
-else
-  cd hyprland-source
-fi
+
+ if [ -d hyprland-npi ]; then
+   cd hyprland-npi
+ elif [ -d hyprland-source ]; then
+   cd hyprland-source
+ elif [ -d hyprland ]; then
+   cd hyprland
+ else
+   echo "tried all !!!! errors"
+ fi
+# if [ -z $(grep "cmake --install ./build --prefix \$\(PREFIX\)" Makefile) ]; then
+#   sed -i 's/cmake --install .\/build/cmake --install .\/build --prefix $(PREFIX)/g' Makefile
+# else 
+#   echo "file is already patched"
+# fi
+
 make install PREFIX="$pkgdir/usr"
 make installheaders PREFIX="$pkgdir/usr"
-strip -v $pkgdir/usr/bin/Hyprland
+# strip -v $pkgdir/usr/bin/Hyprland
 # strip -v $pkgdir/usr/bin/hyprpm
-strip -v $pkgdir/usr/bin/hyprctl
+# strip -v $pkgdir/usr/bin/hyprctl
 # strip -v $pkgdir/usr/lib/libwlroots.so.13032
 cp /home/as/.images/ori.png "$pkgdir/usr/share/hyprland/wall2.png"
 chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
