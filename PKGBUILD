@@ -59,51 +59,57 @@ makedepends=(
 provides=("hyprland=mybuild")
 conflicts=(hyprland)
 options=(strip !docs !debug)
-cd src
-if [ -d hyprland ]; then
-    cd hyprland
-    git pull 
-else 
-    git clone --recursive https://github.com/hyprwm/hyprland
-    cd hyprland
-fi
-make release
+
 pkgver() {
     cd hyprland
+
   cat props.json | jq -r .version
 }
 prepare() {
-  echo "lmao"
+    if [ -d hyprland ]; then
+	cd hyprland
+	git pull 
+    else 
+	git clone --recursive https://github.com/hyprwm/hyprland
+    fi
 }
 
 build() {
-    echo "build block"
+    cd hyprland
+    if [ -d build ]; then
+	cd build 
+    else
+	mkdir build
+	cd build
+    fi
+    cmake .. 
+    make -j$(nproc)
 }
 
 package() {
 
- if [ -d hyprland-npi ]; then
-   cd hyprland-npi
- elif [ -d hyprland-source ]; then
-   cd hyprland-source
- elif [ -d hyprland ]; then
-   cd hyprland
- else
-   echo "tried all !!!! errors"
- fi
+ # if [ -d hyprland-npi ]; then
+ #   cd hyprland-npi
+ # elif [ -d hyprland-source ]; then
+ #   cd hyprland-source
+ # elif [ -d hyprland ]; then
+ #   cd hyprland
+ # else
+ #   echo "tried all !!!! errors"
+ # fi
+cd $srcdir/hyprland
 # if [ -z $(grep "cmake --install ./build --prefix \$\(PREFIX\)" Makefile) ]; then
 #   sed -i 's/cmake --install .\/build/cmake --install .\/build --prefix $(PREFIX)/g' Makefile
 # else 
 #   echo "file is already patched"
 # fi
 
-make install PREFIX="$pkgdir/usr"
+cmake --install ./build --prefix "$pkgdir/usr"
 make installheaders PREFIX="$pkgdir/usr"
 # strip -v $pkgdir/usr/bin/Hyprland
 # strip -v $pkgdir/usr/bin/hyprpm
 # strip -v $pkgdir/usr/bin/hyprctl
 # strip -v $pkgdir/usr/lib/libwlroots.so.13032
-cp /home/as/.images/ori.png "$pkgdir/usr/share/hyprland/wall2.png"
+cp .ori.png "$pkgdir/usr/share/hyprland/wall2.png"
 chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
-cd $pkgdir
 }
