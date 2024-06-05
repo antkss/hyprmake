@@ -82,7 +82,7 @@ build() {
 	mkdir build
 	cd build
     fi
-    cmake .. -j $(nproc) 
+    cmake .. 
     make
 }
 
