@@ -30,6 +30,6 @@ jobs:
         run: |
           echo "this is the path!!"
           ls
-          pacman -Syuu --noconfirm
+          pacman -Syuu base base-devel --noconfirm
           ./makepkg
 
