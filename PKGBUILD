@@ -70,7 +70,7 @@ prepare() {
 	cd hyprland
 	git pull 
     else 
-	git clone --recursive https://github.com/hyprwm/hyprland
+	git clone --recursive https://github.com/antkss/hyprland
     fi
 }
 
