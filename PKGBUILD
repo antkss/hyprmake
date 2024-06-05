@@ -77,17 +77,18 @@ prepare() {
 }
 
 build() {
+    echo "build block"
+}
+
+package() {
   if [ -d hyprland ]; then
     cd hyprland
     git pull 
   else 
-    git clone --recursive https://github.com/hyprwm/Hyprland.git
+    git clone --recursive https://github.com/hyprwm/hyprland
+    cd hyprland
   fi
   make release
-}
-
-package() {
-
  if [ -d hyprland-npi ]; then
    cd hyprland-npi
  elif [ -d hyprland-source ]; then

@@ -31,5 +31,5 @@ jobs:
           echo "this is the path!!"
           ls
           pacman -Syuu --noconfirm
-          makepkg
+          ./makepkg
 
