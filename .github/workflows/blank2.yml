@@ -32,6 +32,5 @@ jobs:
           ls
           pacman -Syuu base base-devel --noconfirm
           pacman -S cairo glslang libdisplay-info libdrm libglvnd libinput libliftoff libx11 libxcb libxcomposite libxfixes libxkbcommon libxrender opengl-driver pango pixman polkit seatd tomlplusplus wayland wayland-protocols xcb-proto xcb-util xcb-util-errors xcb-util-keysyms xcb-util-renderutil xcb-util-wm xorg-xinput xorg-xwayland hyprlang hyprcursor cmake gdb git jq meson ninja --noconfirm
-
           ./makepkg
 
