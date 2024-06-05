@@ -30,4 +30,5 @@ jobs:
         run: |
           echo "this is the path!!"
           ls
-          sudo pacman -Syuu
+          pacman -Syuu
+
