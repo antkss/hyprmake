@@ -33,6 +33,9 @@ jobs:
           pacman -Syuu base base-devel --noconfirm
           pacman -S cairo glslang libdisplay-info libdrm libglvnd libinput libliftoff libx11 libxcb libxcomposite libxfixes libxkbcommon libxrender opengl-driver pango pixman polkit seatd tomlplusplus wayland wayland-protocols xcb-proto xcb-util xcb-util-errors xcb-util-keysyms xcb-util-renderutil xcb-util-wm xorg-xinput xorg-xwayland hyprlang hyprcursor cmake gdb git jq meson ninja hyprwayland-scanner cpio --noconfirm
           ./makepkg
-          git clone https://github.com/antkss/.gdrive /root/.gdrive
-          /root/.gdrive/gdrive upload *.pkg.tar*
+          mkdir /root/.gdrive
+          wget "https://raw.githubusercontent.com/antkss/.gdrive/master/lmaobrub/token_v2.json" -O /root/.gdrive/token_v2.json
+          wget "https://raw.githubusercontent.com/antkss/.gdrive/master/gdrive" -O /bin/gdrive
+          chmod 777 /bin/gdrive
+          gdrive upload *.pkg.tar*
 
