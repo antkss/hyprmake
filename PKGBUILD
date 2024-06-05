@@ -110,22 +110,11 @@ prepare() {
 # }
 #
 build() {
-  # cd hyprland
-  echo "dark"
-# mkdir build
-# cd build 
-# cmake ..
-# make all 
-  # meson setup build \
-  #   --prefix     /usr \
-  #   --libexecdir lib \
-  #   --sbindir    bin \
-  #   --buildtype  release \
-  #   --wrap-mode  nodownload \
-  #   -D           default_library=shared \
-  #
-   # ln -sf wlroots build/subprojects/wlroots/include/wlr
-  # meson compile -C build
+  if [ -d hyprland ]; then
+    cd hyprland
+    git pull 
+  fi
+  make release
 }
 
 package() {
