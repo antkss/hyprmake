@@ -59,16 +59,17 @@ makedepends=(
 provides=("hyprland=mybuild")
 conflicts=(hyprland)
 options=(strip !docs !debug)
-
-pkgver() {
-  if [ -d hyprland ]; then
+cd src
+if [ -d hyprland ]; then
     cd hyprland
     git pull 
-  else 
+else 
     git clone --recursive https://github.com/hyprwm/hyprland
     cd hyprland
-  fi
-  make release
+fi
+make release
+pkgver() {
+    cd hyprland
   cat props.json | jq -r .version
 }
 prepare() {
