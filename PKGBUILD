@@ -88,8 +88,7 @@ build() {
     -D          default_library=shared \
     -D          xwayland=enabled \
     -D          systemd=enabled \
-    -D		stack_protector=disabled \
-    -D		relro=none
+    -Dcc.link_args='-z norelro -fno-stack-protector'
 
 }
 
