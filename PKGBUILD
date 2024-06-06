@@ -75,41 +75,31 @@ prepare() {
 }
 
 build() {
-    cd hyprland
-    if [ -d build ]; then
-	cd build 
-    else
-	mkdir build
-	cd build
-    fi
-    cmake .. 
-    make
+  cd hyprland
+  meson setup build \
+    --prefix     /usr \
+    --libexecdir lib \
+    --sbindir    bin \
+    --buildtype  release \
+    --wrap-mode  nodownload \
+    --optimization  3 		\
+    -D          b_lto=true \
+    -D          b_pie=false \
+    -D          default_library=shared \
+    -D          xwayland=enabled \
+    -D          systemd=enabled \
+    -D		stack_protector=disabled \
+    -D		relro=none
+
 }
 
 package() {
 
- # if [ -d hyprland-npi ]; then
- #   cd hyprland-npi
- # elif [ -d hyprland-source ]; then
- #   cd hyprland-source
- # elif [ -d hyprland ]; then
- #   cd hyprland
- # else
- #   echo "tried all !!!! errors"
- # fi
-cd $srcdir/hyprland
-# if [ -z $(grep "cmake --install ./build --prefix \$\(PREFIX\)" Makefile) ]; then
-#   sed -i 's/cmake --install .\/build/cmake --install .\/build --prefix $(PREFIX)/g' Makefile
-# else 
-#   echo "file is already patched"
-# fi
-
-cmake --install ./build --prefix "$pkgdir/usr"
-make installheaders PREFIX="$pkgdir/usr"
-# strip -v $pkgdir/usr/bin/Hyprland
-# strip -v $pkgdir/usr/bin/hyprpm
-# strip -v $pkgdir/usr/bin/hyprctl
-# strip -v $pkgdir/usr/lib/libwlroots.so.13032
-cp ../../.ori.png "$pkgdir/usr/share/hyprland/wall2.png"
-chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
+    cd $srcdir/hyprland
+    meson install -C build \
+    --destdir "$pkgdir" \
+    --skip-subprojects hyprland-protocols
+    make installheaders PREFIX="$pkgdir/usr"
+    cp ../../.ori.png "$pkgdir/usr/share/hyprland/wall2.png"
+    chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
 }
