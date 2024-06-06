@@ -97,7 +97,7 @@ package() {
     meson install -C build \
     --destdir "$pkgdir" \
     --skip-subprojects hyprland-protocols
-    make installheaders PREFIX="$pkgdir/usr"
+    # make installheaders PREFIX="$pkgdir/usr"
     cp ../../.ori.png "$pkgdir/usr/share/hyprland/wall2.png"
     chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
 }
