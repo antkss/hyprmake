@@ -2,8 +2,8 @@
 # Maintainer: éclairevoyant
 # Contributor: ThatOneCalculator <kainoa at t1c dot dev>
 
-pkgname=hyprland-test
-pkgver=0.40.0
+pkgname=hyprland-git
+pkgver=0.45.0
 pkgrel=1
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(x86_64)
@@ -14,7 +14,8 @@ depends=(
   glib2
   glibc
   glslang
-  libdisplay-info
+  # libdisplay-info
+  aquamarine
   libdrm
   libglvnd
   libinput
@@ -44,33 +45,45 @@ depends=(
   xorg-xwayland
   hyprlang
   hyprcursor
+  # libdisplay-info.so
+  hyprwayland-scanner
+  hyprutils
 )
-depends+=(libdisplay-info.so)
+# depends+=(libdisplay-info.so)
 makedepends=(
-  cmake
-  gdb
-  git
-  jq
-  meson
-  ninja
-  pkgconf
-  xorgproto
+ cmake
+ git
+ jq
+ meson
+ ninja
+ pkgconf
+ xorgproto
+ hyprwayland-scanner
+ hyprutils
+ libliftoff
+ seatd
+ tomlplusplus
+ xcb-util-errors
+ xorg-xinput
+ xorg-xwayland
+ hyprcursor
 )
 provides=("hyprland=mybuild")
 conflicts=(hyprland)
-options=(strip !docs !debug)
+options=(!strip !docs !debug)
 
 pkgver() {
     cd hyprland
+    cat VERSION
 
-  cat props.json | jq -r .version
+  # cat props.json | jq -r .version
 }
 prepare() {
     if [ -d hyprland ]; then
 	cd hyprland
-	git pull 
+	git pull origin main
     else 
-	git clone --recursive https://github.com/antkss/hyprland
+	git clone --recursive https://github.com/hyprwm/hyprland
     fi
 }
 
@@ -93,11 +106,16 @@ build() {
 
 package() {
 
-    cd $srcdir/hyprland
-    meson install -C build \
-    --destdir "$pkgdir" \
-    --skip-subprojects hyprland-protocols
-    # make installheaders PREFIX="$pkgdir/usr"
-    cp ../../.ori.png "$pkgdir/usr/share/hyprland/wall2.png"
-    chmod 777 "$pkgdir/usr/share/hyprland/wall2.png"
+  cd $srcdir/hyprland
+  meson install -C build \
+  --destdir "$pkgdir" \
+  --strip
+  --skip-subprojects hyprland-protocols\
+  # make installheaders PREFIX="$pkgdir/usr"
+  rm "$pkgdir/usr/share/hypr/wall0.png"
+  rm "$pkgdir/usr/share/hypr/wall1.png"
+  cp .wall.png $pkgdir/usr/share/hypr/wall0.png
+  cp .wall.png $pkgdir/usr/share/hypr/wall1.png
+  cp ../../.ori.png "$pkgdir/usr/share/hypr/wall2.png"
+  chmod 777 "$pkgdir/usr/share/hypr/wall2.png"
 }
