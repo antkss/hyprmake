@@ -3,12 +3,13 @@
 # Contributor: ThatOneCalculator <kainoa at t1c dot dev>
 
 pkgname=hyprland-git
-pkgver=0.45.0
+pkgver=0.46.0
 pkgrel=1
 pkgdesc="A dynamic tiling Wayland compositor based on wlroots that doesn't sacrifice on its looks."
 arch=(x86_64)
 license=(BSD)
 depends=(
+  hyprgraphics
   cairo
   gcc-libs
   glib2
@@ -110,12 +111,12 @@ package() {
   meson install -C build \
   --destdir "$pkgdir" \
   --strip
-  --skip-subprojects hyprland-protocols\
+  # --skip-subprojects hyprland-protocols\
   # make installheaders PREFIX="$pkgdir/usr"
   rm "$pkgdir/usr/share/hypr/wall0.png"
   rm "$pkgdir/usr/share/hypr/wall1.png"
-  cp .wall.png $pkgdir/usr/share/hypr/wall0.png
-  cp .wall.png $pkgdir/usr/share/hypr/wall1.png
+  cp ../../.wall.png $pkgdir/usr/share/hypr/wall0.png
+  cp ../../.wall.png $pkgdir/usr/share/hypr/wall1.png
   cp ../../.ori.png "$pkgdir/usr/share/hypr/wall2.png"
   chmod 777 "$pkgdir/usr/share/hypr/wall2.png"
 }
