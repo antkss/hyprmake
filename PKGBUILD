@@ -77,7 +77,7 @@ prepare() {
 	fi
 	cd $srcdir
 	echo "cloning all stuff"
-	pack=(aquamarine  hyprgraphics  hyprland-qtutils  hyprpicker  hyprwayland-scanner hyprcursor  hyprlang hyprutils)
+	pack=(aquamarine  hyprgraphics  hyprland-qtutils  hyprpicker  hyprwayland-scanner hyprcursor  hyprlang hyprutils hyprlock )
 	for i in ${pack[@]}; do
 	   if [ -d $i ]; then
 			echo "skipping $i"
@@ -113,6 +113,12 @@ build() {
 	cd $srcdir/hyprcursor
 	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr -S . -B ./build
 	cmake --build ./build --config Release --target all -j`nproc 2>/dev/null || getconf _NPROCESSORS_CONF`
+	cd $srcdir/hyprland-qtutils
+	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr -S . -B ./build
+	cmake --build ./build --config Release --target all -j`nproc 2>/dev/null || getconf NPROCESSORS_CONF`
+	cd $srcdir/hyprlock
+	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=$pkgdir/usr -S . -B ./build
+	cmake --build ./build --config Release --target hyprlock -j`nproc 2>/dev/null || getconf _NPROCESSORS_CONF`
 	cd $srcdir/hyprlang
 	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr -S . -B ./build
 	cmake --build ./build --config Release --target all -j`nproc 2>/dev/null || getconf _NPROCESSORS_CONF`
@@ -136,6 +142,10 @@ build() {
 package() {
 
 
+  cd $srcdir/hyprlock
+  cmake --install build 
+  cd $srcdir/hyprland-qtutils
+  cmake --install build --prefix $pkgdir/usr
   cd $srcdir/aquamarine
   make install
   cd $srcdir/hyprcursor
